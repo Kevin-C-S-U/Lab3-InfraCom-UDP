@@ -1,8 +1,10 @@
+from audioop import add
 import socket
 import threading
 import time
 
 localIP     = "127.0.0.1"
+se = "192.168.26.128"
 localPort   = 20001
 bufferSize  = 1024
 
@@ -27,7 +29,7 @@ UDPServerSocket.bind((localIP, localPort))
 
 print("Servidor UDP listo...")
 
-def handle_client():
+def handle_client(ser, po):
 
     print("Enviando archivo...")
     if escAr == 1:
@@ -39,7 +41,7 @@ def handle_client():
 
     while(data):
 
-        if UDPServerSocket.sendto(str.encode(data), (localIP, localPort)):
+        if UDPServerSocket.sendto(str.encode(data), (ser, po)):
             data = f.read(bufferSize)
             time.sleep(0.02)
     f.close()
@@ -62,9 +64,9 @@ while(True):
     print(clientMsg)
     print(clientIP)
     
-    UDPServerSocket.sendto(str.encode(str(i)), (localIP, localPort))
-    UDPServerSocket.sendto(str.encode(conec), (localIP, localPort))
-    thread = threading.Thread(target=handle_client)
+    UDPServerSocket.sendto(str.encode(str(i)), address)
+    UDPServerSocket.sendto(str.encode(conec), address)
+    thread = threading.Thread(target=handle_client, args=address)
     thread.start()
     print(f"[THREADS ACTIVOS] {threading.activeCount() - 1}")
     i+=1
