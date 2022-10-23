@@ -2,6 +2,7 @@ from audioop import add
 import socket
 import threading
 import time
+import datetime
 
 localIP     = "127.0.0.1"
 se = "192.168.26.128"
@@ -50,10 +51,11 @@ def handle_client(ser, po):
 i = 1
 
 # Listen for incoming datagrams
-while(True):
+while(i<=int(conec)):
     print("Esperando Conexiones")
     bytesAddressPair = UDPServerSocket.recvfrom(bufferSize)
-
+    if i == 1:
+        inicio = time.process_time()
     message = bytesAddressPair[0]
 
     address = bytesAddressPair[1]
@@ -70,3 +72,23 @@ while(True):
     thread.start()
     print(f"[THREADS ACTIVOS] {threading.activeCount() - 1}")
     i+=1
+
+fin = time.process_time()
+totalTime = fin-inicio
+
+UDPServerSocket.close()
+
+dateNtime = datetime.datetime.now()
+nombreFile = f"Logs/{dateNtime.year}-{dateNtime.month}-{dateNtime.day}-{dateNtime.hour}-{dateNtime.minute}-{dateNtime.second}-log"
+
+log = open(nombreFile,"wb")
+
+if escAr == 1:
+    nomAr = "Pequeno.txt"
+    tamAr = "100 MB"
+else:
+    nomAr = "Grande.txt"
+    tamAr = "250 MB"
+
+log.write(f"Nombre del archivo = {nomAr}\nTamano del archivo = {tamAr}\nTiempo transferencia clientes = {totalTime}\nPuerto = {localPort}.txt")
+log.close()

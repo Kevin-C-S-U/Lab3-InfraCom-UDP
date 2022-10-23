@@ -1,0 +1,3 @@
+Archivo recibido = ArchivosRecibidos/Cliente-1-Prueba-5.txt
+Tamano archivo recibido = 1.239776611328125e-05 MB
+Tiempo de transferencia = 0 ns

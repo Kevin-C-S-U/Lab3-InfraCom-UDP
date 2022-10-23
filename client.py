@@ -1,5 +1,9 @@
+from pickletools import TAKEN_FROM_ARGUMENT1
 import socket
 import select
+import datetime
+import time
+import os
 
 msgFromClient       = "Me mandas el archivo plis?"
 bytesToSend         = str.encode(msgFromClient)
@@ -17,15 +21,20 @@ UDPClientSocket.sendto(bytesToSend, serverAddressPort)
 print("Esperando respuesta...")
 
 msgFromServer = UDPClientSocket.recvfrom(bufferSize)
-c = msgFromServer[0]
+inicio = time.process_time()
+print(inicio)
+c = int(msgFromServer[0])
 cliente = "Numero de cliente: {}".format(c)
 print(cliente)
+
 msgFromServer = UDPClientSocket.recvfrom(bufferSize)
-p = msgFromServer[0]
+p = int(msgFromServer[0])
 prueba = "Prueba con: {} clientes".format(p)
 print(prueba)
 
-f = open(f"ArchivosRecibidos/Cliente-{c}-Prueba{p}","wb")
+nomAr = f"ArchivosRecibidos/Cliente-{c}-Prueba-{p}.txt"
+
+f = open(nomAr,"wb")
 
 while True:
     ready = select.select([UDPClientSocket], [], [], timeout)
@@ -33,7 +42,27 @@ while True:
         data, addr =   UDPClientSocket.recvfrom(1024)
         f.write(data)
     else:
+        fin = time.process_time()
         print("Se ha recibido el archivo")
         f.close()
         break
+
+
+print(fin)
+totalTime = fin-inicio
+print(totalTime)
+
+time.sleep(5)
+
 UDPClientSocket.close()
+
+dateNtime = datetime.datetime.now()
+nombreFile = f"Logs/Cliente{c}-{dateNtime.year}-{dateNtime.month}-{dateNtime.day}-{dateNtime.hour}-{dateNtime.minute}-{dateNtime.second}-log.txt"
+
+ar = os.stat(nomAr)
+tamAr = ar.st_size/ (1024 * 1024)
+
+log = open(nombreFile,"w")
+
+log.write(f"Archivo recibido = {nomAr}\nTamano archivo recibido = {tamAr} MB\nTiempo de transferencia = {totalTime} s")
+log.close()
