@@ -26,7 +26,7 @@ while(centinela):
 UDPServerSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
 
 # Bind to address and ip
-UDPServerSocket.bind((localIP, localPort))
+UDPServerSocket.bind((se, localPort))
 
 print("Servidor UDP listo...")
 
@@ -79,9 +79,9 @@ totalTime = fin-inicio
 UDPServerSocket.close()
 
 dateNtime = datetime.datetime.now()
-nombreFile = f"Logs/{dateNtime.year}-{dateNtime.month}-{dateNtime.day}-{dateNtime.hour}-{dateNtime.minute}-{dateNtime.second}-log"
+nombreFile = f"Logs/{dateNtime.year}-{dateNtime.month}-{dateNtime.day}-{dateNtime.hour}-{dateNtime.minute}-{dateNtime.second}-log.txt"
 
-log = open(nombreFile,"wb")
+log = open(nombreFile,"w")
 
 if escAr == 1:
     nomAr = "Pequeno.txt"
@@ -90,5 +90,5 @@ else:
     nomAr = "Grande.txt"
     tamAr = "250 MB"
 
-log.write(f"Nombre del archivo = {nomAr}\nTamano del archivo = {tamAr}\nTiempo transferencia clientes = {totalTime}\nPuerto = {localPort}.txt")
+log.write(f"Nombre del archivo = {nomAr}\nTamano del archivo = {tamAr}\nTiempo transferencia clientes = {totalTime}\nPuerto = {localPort}")
 log.close()
